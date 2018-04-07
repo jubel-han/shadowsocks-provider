@@ -1,6 +1,6 @@
-# AWS Shadowsocks
+# Shadowsocks Provider
 
-Providing the containerized Shadowsocks with KCPTun enabled through the Terraform and Ansible automatically in seconds.
+Providing the containerized Shadowsocks with KCPTun enabled on AWS by the Terraform and Ansible in seconds.
 
 ## prerequisite
 
