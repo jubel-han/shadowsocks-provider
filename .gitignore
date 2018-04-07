@@ -1,0 +1,4 @@
+.terraform
+docker-compose.yml
+*.retry
+*terraform.tfstate*

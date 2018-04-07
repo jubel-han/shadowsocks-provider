@@ -1,0 +1,72 @@
+- name: Add the hosts
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - add_host:
+        name: shadowsocks
+        groups: aws
+        ansible_user: ubuntu
+        ansible_host: "{{ aws_shadowsocks_host_ip.value if aws_shadowsocks_host_ip is defined else host_ip }}"
+        ansible_ssh_private_key_file: "{{ aws_shadowsocks_ssh_key_file.value if aws_shadowsocks_ssh_key_file is defined else ssh_key }}"
+
+- name: Provision ShadowSocks Server and KCPTun Server on AWS EC2.
+  hosts: aws
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Copy docker compose yaml file
+      copy:
+        src: docker-compose.yml
+        dest: /home/ubuntu/
+        owner: ubuntu
+        group: ubuntu
+
+    - docker_service:
+        project_src: .
+        state: absent
+
+    - docker_service:
+        project_src: .
+      register: output
+
+    - debug:
+        var: output
+
+    - docker_service:
+        project_src: .
+        build: no
+      register: output
+
+    - debug:
+        var: output
+
+    - assert:
+        that: "not output.changed "
+
+    - docker_service:
+        project_src: .
+        build: no
+        stopped: true
+      register: output
+
+    - debug:
+        var: output
+
+    - assert:
+        that:
+          - "not kcptun_server.ubuntu_kcptun_server_1.state.running"
+          - "not ss_server.ubuntu_ss_server_1.state.running"
+
+    - docker_service:
+        project_src: .
+        build: no
+        restarted: true
+      register: output
+
+    - debug:
+        var: output
+
+    - assert:
+        that:
+          - "kcptun_server.ubuntu_kcptun_server_1.state.running"
+          - "ss_server.ubuntu_ss_server_1.state.running"
