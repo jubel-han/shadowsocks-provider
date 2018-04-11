@@ -7,6 +7,9 @@ ENV DOWNLOAD_URL "https://github.com/xtaci/kcptun/releases/download/v${VERSION}/
 
 RUN apt-get update && \
     apt-get install -y wget && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    \
     wget -O kcptun.tar.gz ${DOWNLOAD_URL} && \
     tar -xvf kcptun.tar.gz && \
     rm -f client_linux_amd64 && \
