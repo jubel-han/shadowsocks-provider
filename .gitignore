@@ -1,4 +1,7 @@
+.idea
 .terraform
 docker-compose.yml
+*.tfvars
 *.retry
 *terraform.tfstate*
+!terraform.tfvars

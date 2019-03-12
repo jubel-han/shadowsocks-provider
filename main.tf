@@ -99,6 +99,16 @@ resource "aws_instance" "shadowsocks" {
     "aws_security_group.allow_access",
     "aws_key_pair.deployer",
   ]
+  provisioner "remote-exec" {
+    inline = ["uname -a"]
+
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      timeout = "10m"
+      private_key = "${file("${var.aws_ssh_key_file}")}"
+    }
+  }
 
   provisioner "local-exec" {
     command     =  "ansible-galaxy install nickjj.docker"
@@ -113,6 +123,12 @@ resource "aws_instance" "shadowsocks" {
   provisioner "local-exec" {
     command     =  "ansible-playbook -i hosts provision.yml -e host_ip=${self.public_ip} -e ssh_key=${var.aws_ssh_key_file}"
     on_failure  =  "continue"
+  }
+
+  timeouts {
+    create = "30m"
+    update = "30m"
+    delete = "30m"
   }
 }
 
