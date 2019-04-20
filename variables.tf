@@ -1,3 +1,12 @@
+variable "obfs_server" {
+  description = "The obfs server configuration"
+
+  default = {
+    listen = "80"
+    mode = "http"  # http or tls
+  }
+}
+
 variable "kcptun_server" {
   description = "The KCPTun server configuration"
 
@@ -12,14 +21,14 @@ variable "ss_server" {
 
   default = {
     listen = "8838"
-    mode = "aes-256-cfb"
+    mode = "aes-256-gcm"
     workers = "10"
   }
 }
 
 variable "password" {
   description = "The password using for connecting ss and kcptun server"
-  
+
   default = "password"
 }
 

@@ -8,6 +8,8 @@ data "template_file" "docker_compose" {
   template = "${file("docker-compose.tpl")}"
 
   vars {
+    obfs_server_listen_port     = "${var.obfs_server["listen"]}"
+    obfs_server_mode            = "${var.obfs_server["mode"]}"
     kcptun_server_listen_port   = "${var.kcptun_server["listen"]}"
     kcptun_server_mode          = "${var.kcptun_server["mode"]}"
     ss_server_listen_port       = "${var.ss_server["listen"]}"
@@ -64,6 +66,13 @@ resource "aws_security_group" "allow_access" {
     cidr_blocks = ["0.0.0.0/0"],
     from_port="${var.kcptun_server["listen"]}",
     to_port="${var.kcptun_server["listen"]}"
+  }
+
+  ingress       {
+    protocol="tcp",
+    cidr_blocks = ["0.0.0.0/0"],
+    from_port="${var.obfs_server["listen"]}",
+    to_port="${var.obfs_server["listen"]}"
   }
 
   tags          {

@@ -1,4 +1,8 @@
 # uncomment and update the value for the following keys to override the default value
+obfs_server = {
+  # listen             = "5000"
+  # mode               = "http"
+}
 
 kcptun_server = {
   # listen             = "4000"
@@ -7,7 +11,7 @@ kcptun_server = {
 
 ss_server = {
   # listen             = "8838"
-  # mode               = "aes-256-cfb"
+  # mode               = "aes-256-gcm"
   # workers            = "100"
 }
 
